@@ -9,7 +9,9 @@ public class Manager : MonoBehaviour {
 
     public GameObject carPrefab;
     public GameObject checkPointPrefab;
-    public float roundTime  = 60;
+    public float roundTime;
+    [SerializeField]
+    private bool incrementRoundTime;
     public string netId = "dc001";
     public string netDesc = "Drifty Car Neural Net";
 
@@ -65,6 +67,10 @@ public class Manager : MonoBehaviour {
             generationNumber++;
             
             isTraining = true;
+
+            if (incrementRoundTime)
+                roundTime++;
+
             Invoke("Timer",roundTime);
             CreateCars();
         }
