@@ -221,7 +221,7 @@ public class CarPhysics : MonoBehaviour
         {
             if (initialized)
             {
-                net.AddFitness(-1f);
+                net.AddFitness(-0.5f);
                 //Destroy(this.gameObject);
             }
         }
