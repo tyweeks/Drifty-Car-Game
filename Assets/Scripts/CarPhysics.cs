@@ -245,7 +245,7 @@ public class CarPhysics : MonoBehaviour
 
                 if (initialized)
                 {
-                    net.AddFitness(1f + (rb.velocity.magnitude/100)); // bonus for hitting them at high speed
+                    net.AddFitness(1f);
                     UpdateCarColor(net.GetFitness());
                 }
             }
