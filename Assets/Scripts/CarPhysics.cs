@@ -136,11 +136,11 @@ public class CarPhysics : MonoBehaviour
 
             float[] output = net.FeedForward(inputs);
 
-            if (output[0] > output[1])
+            if (output[0] > 0)
             {
                 Forward();
             }
-            else
+            if (output[1] > 0)
             {
                 Backward();
             }
@@ -221,7 +221,7 @@ public class CarPhysics : MonoBehaviour
         {
             if (initialized)
             {
-                net.AddFitness(-0.5f);
+                net.AddFitness(-1f);
                 //Destroy(this.gameObject);
             }
         }
@@ -245,7 +245,7 @@ public class CarPhysics : MonoBehaviour
 
                 if (initialized)
                 {
-                    net.AddFitness(1f * (rb.velocity.magnitude/10)); // bonus for hitting them at high speed
+                    net.AddFitness(1f + (rb.velocity.magnitude/100)); // bonus for hitting them at high speed
                     UpdateCarColor(net.GetFitness());
                 }
             }
