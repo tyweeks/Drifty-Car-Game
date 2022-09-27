@@ -4007,7 +4007,7 @@ MonoBehaviour:
     type: 3}
   checkPointPrefab: {fileID: 3096690755722401185, guid: 8dd23ed3cebfb1a4d9c53f2649fa9f74,
     type: 3}
-  roundTime: 2
+  roundTime: 5
   incrementRoundTime: 1
   netId: dc001
   netDesc: Drifty Car Neural Net

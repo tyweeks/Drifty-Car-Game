@@ -19,7 +19,7 @@ public class Manager : MonoBehaviour {
     private bool isTraining = false;
     private int populationSize = 50;
     public int generationNumber = 0;
-    private int[] layers = new int[] { 10, 10, 10, 4 }; //10 input and 4 output
+    private int[] layers = new int[] { 8, 6, 4 }; //8 input and 4 output
     private List<NeuralNetwork> nets;
     private List<CarPhysics> CarList = null;
     private float bestFitness = 0.0f;
@@ -69,7 +69,7 @@ public class Manager : MonoBehaviour {
             isTraining = true;
 
             if (incrementRoundTime)
-                roundTime++;
+                roundTime *= 1.01f;
 
             Invoke("Timer",roundTime);
             CreateCars();

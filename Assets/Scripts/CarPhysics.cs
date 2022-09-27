@@ -37,12 +37,10 @@ public class CarPhysics : MonoBehaviour
     {
         if (initialized == true)
         {
-            float[] inputs = new float[10];
+            float[] inputs = new float[8];
 
             RaycastHit hit;
-            //float drawDistance = 2.5f;
-            float closestHitDistance = 1000f;
-            Vector3 closestHit = new Vector3();
+            float drawDistance = 10f;
 
             Ray leftRay = new Ray(transform.position, transform.forward);
             Ray leftForwardRay = new Ray(transform.position, (transform.forward + transform.right).normalized);
@@ -64,71 +62,46 @@ public class CarPhysics : MonoBehaviour
 
             if (Physics.Raycast(leftRay, out hit, 1000.0f, myLayerMask))
             {
-                if (hit.distance < closestHitDistance)
+                if (hit.distance < drawDistance)
                 {
-                    closestHitDistance = hit.distance;
-                    closestHit = hit.point;
+                    Debug.DrawLine(transform.position, hit.point);
                 }
-                //if (hit.distance < drawDistance)
-                //{
-                //    Debug.DrawLine(transform.position, hit.point);
-                //}
                 inputs[0] = hit.distance;
             }
             if (Physics.Raycast(leftForwardRay, out hit, 1000.0f, myLayerMask))
             {
-                if (hit.distance < closestHitDistance)
+                if (hit.distance < drawDistance)
                 {
-                    closestHitDistance = hit.distance;
-                    closestHit = hit.point;
+                    Debug.DrawLine(transform.position, hit.point);
                 }
-                //if (hit.distance < drawDistance)
-                //{
-                //    Debug.DrawLine(transform.position, hit.point);
-                //}
                 inputs[1] = hit.distance;
             }
             if (Physics.Raycast(forwardRay, out hit, 1000.0f, myLayerMask))
             {
-                if (hit.distance < closestHitDistance)
+                if (hit.distance < drawDistance)
                 {
-                    closestHitDistance = hit.distance;
-                    closestHit = hit.point;
+                    Debug.DrawLine(transform.position, hit.point);
                 }
-                //if (hit.distance < drawDistance)
-                //{
-                //    Debug.DrawLine(transform.position, hit.point);
-                //}
                 inputs[2] = hit.distance;
             }
             if (Physics.Raycast(rightForwardRay, out hit, 1000.0f, myLayerMask))
             {
-                if (hit.distance < closestHitDistance)
+                if (hit.distance < drawDistance)
                 {
-                    closestHitDistance = hit.distance;
-                    closestHit = hit.point;
+                    Debug.DrawLine(transform.position, hit.point);
                 }
-                //if (hit.distance < drawDistance)
-                //{
-                //    Debug.DrawLine(transform.position, hit.point);
-                //}
                 inputs[3] = hit.distance;
             }
             if (Physics.Raycast(rightRay, out hit, 1000.0f, myLayerMask))
             {
-                if (hit.distance < closestHitDistance)
+                if (hit.distance < drawDistance)
                 {
-                    closestHitDistance = hit.distance;
-                    closestHit = hit.point;
+                    Debug.DrawLine(transform.position, hit.point);
                 }
-                //if (hit.distance < drawDistance)
-                //{
-                //    Debug.DrawLine(transform.position, hit.point);
-                //}
                 inputs[4] = hit.distance;
             }
             /*
-             * if (Physics.Raycast(backRay, out hit, 1000.0f, myLayerMask))
+            if (Physics.Raycast(backRay, out hit, 1000.0f, myLayerMask))
             {
                 if (hit.distance < closestHitDistance)
                 {
@@ -144,52 +117,38 @@ public class CarPhysics : MonoBehaviour
             */
             if (Physics.Raycast(rightForwardForwardRay, out hit, 1000.0f, myLayerMask))
             {
-                if (hit.distance < closestHitDistance)
+                if (hit.distance < drawDistance)
                 {
-                    closestHitDistance = hit.distance;
-                    closestHit = hit.point;
+                    Debug.DrawLine(transform.position, hit.point);
                 }
-                //if (hit.distance < drawDistance)
-                //{
-                //    Debug.DrawLine(transform.position, hit.point);
-                //}
                 inputs[6] = hit.distance;
             }
             if (Physics.Raycast(leftForwardForwardRay, out hit, 1000.0f, myLayerMask))
             {
-                if (hit.distance < closestHitDistance)
+                if (hit.distance < drawDistance)
                 {
-                    closestHitDistance = hit.distance;
-                    closestHit = hit.point;
+                    Debug.DrawLine(transform.position, hit.point);
                 }
-                //if (hit.distance < drawDistance)
-                //{
-                //    Debug.DrawLine(transform.position, hit.point);
-                //}
                 inputs[7] = hit.distance;
             }
 
-            Debug.DrawLine(transform.position, closestHit);
-
             inputs[5] = rb.velocity.magnitude;
-            inputs[8] = rb.velocity.x;
-            inputs[9] = rb.velocity.z;
 
             float[] output = net.FeedForward(inputs);
 
-            if (output[0] > 0)
+            if (output[0] > output[1])
             {
                 Forward();
             }
-            if (output[1] > 0)
+            else
             {
                 Backward();
             }
-            if (output[2] > 0)
+            if (output[2] > output[3])
             {
                 TurnLeft();
             }
-            if (output[3] > 0)
+            else
             {
                 TurnRight();
             }
@@ -286,7 +245,15 @@ public class CarPhysics : MonoBehaviour
 
                 if (initialized)
                 {
-                    net.AddFitness(1f);
+                    net.AddFitness(1f * (rb.velocity.magnitude/10)); // bonus for hitting them at high speed
+                    UpdateCarColor(net.GetFitness());
+                }
+            }
+            else // not hitting the correct checkpoint. deduct fitness
+            {
+                if (initialized)
+                {
+                    net.AddFitness(-10f);
                     UpdateCarColor(net.GetFitness());
                 }
             }
